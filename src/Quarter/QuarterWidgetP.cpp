@@ -194,7 +194,7 @@ QuarterWidgetP::removeFromCacheContext(QuarterWidgetP_cachecontext * context, co
 #endif
         }
         // fetch the cc_glglue context instance as a workaround for a bug fixed in Coin r12818
-        (void) cc_glglue_instance(context->id);
+        // (void) cc_glglue_instance(context->id);
         cachecontext_list->removeFast(i);
         SoContextHandler::destructingContext(context->id);
         if (widget->context()->isValid()) {
