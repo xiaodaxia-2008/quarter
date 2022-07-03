@@ -40,6 +40,10 @@
 #include <QMenu>
 #include <QMap>
 
+#if QT_VERSION >= 0x060000
+#include <QOpenGLContext>
+#endif
+
 #include <Inventor/nodes/SoCamera.h>
 #include <Inventor/nodes/SoNode.h>
 #include <Inventor/actions/SoSearchAction.h>
