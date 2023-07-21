@@ -1,4 +1,4 @@
-include_directories(${CMAKE_BINARY_DIR})
+include_directories(${PROJECT_BINARY_DIR})
 
 set(QUARTER_SRCS
   ContextMenu.cpp
@@ -35,10 +35,10 @@ set(QUARTER_PRIVATE_HDRS
 )
 
 set(MOCCABLE_FILES
-  "${CMAKE_SOURCE_DIR}/include/Quarter/QuarterWidget.h"
-  "${CMAKE_SOURCE_DIR}/include/Quarter/eventhandlers/EventFilter.h"
-  "${CMAKE_SOURCE_DIR}/include/Quarter/eventhandlers/DragDropHandler.h"
-  "${CMAKE_SOURCE_DIR}/include/Quarter/eventhandlers/FocusHandler.h"
+  "${PROJECT_SOURCE_DIR}/include/Quarter/QuarterWidget.h"
+  "${PROJECT_SOURCE_DIR}/include/Quarter/eventhandlers/EventFilter.h"
+  "${PROJECT_SOURCE_DIR}/include/Quarter/eventhandlers/DragDropHandler.h"
+  "${PROJECT_SOURCE_DIR}/include/Quarter/eventhandlers/FocusHandler.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/SensorManager.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/ContextMenu.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/SignalThread.h"
@@ -119,9 +119,9 @@ endif()
 
 target_include_directories(${PROJECT_NAME}
   PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/src>
-    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
-    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
+    $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/src>
+    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
     ${OPENGL_INCLUDE_DIR}
 )

@@ -41,7 +41,7 @@ endif()
 # Prevent in-source builds, as they often cause severe build problems
 # ############################################################################
 
-if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
+if(PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
   message(FATAL_ERROR "${CMAKE_PROJECT_NAME} requires an out of source build. Please create a separate build directory and run 'cmake <path_to_${CMAKE_PROJECT_NAME}> [options]' from there.")
 endif()
 
@@ -156,15 +156,15 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 # Set common output directories for all targets built.
 # First for the generic no-config case (e.g. with mingw)
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/lib")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/lib")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/bin")
 # Second, for multi-config builds (e.g. msvc)
 foreach (_config ${CMAKE_CONFIGURATION_TYPES})
   string(TOUPPER ${_config} _config)
-  set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${_config} "${CMAKE_BINARY_DIR}/lib")
-  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_${_config} "${CMAKE_BINARY_DIR}/lib")
-  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${_config} "${CMAKE_BINARY_DIR}/bin")
+  set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${_config} "${PROJECT_BINARY_DIR}/lib")
+  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_${_config} "${PROJECT_BINARY_DIR}/lib")
+  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${_config} "${PROJECT_BINARY_DIR}/bin")
 endforeach()
 
 set(CMAKE_INCLUDE_CURRENT_DIR true)
@@ -172,23 +172,23 @@ set(CMAKE_INCLUDE_CURRENT_DIR true)
 configure_file(config.h.cmake.in config.h @ONLY)
 
 set(INST_HDRS
-  "${CMAKE_SOURCE_DIR}/include/${PROJECT_NAME}/Basic.h"
-  "${CMAKE_SOURCE_DIR}/include/${PROJECT_NAME}/QtCoinCompatibility.h"
-  "${CMAKE_SOURCE_DIR}/include/${PROJECT_NAME}/Quarter.h"
-  "${CMAKE_SOURCE_DIR}/include/${PROJECT_NAME}/QuarterWidget.h"
+  "${PROJECT_SOURCE_DIR}/include/${PROJECT_NAME}/Basic.h"
+  "${PROJECT_SOURCE_DIR}/include/${PROJECT_NAME}/QtCoinCompatibility.h"
+  "${PROJECT_SOURCE_DIR}/include/${PROJECT_NAME}/Quarter.h"
+  "${PROJECT_SOURCE_DIR}/include/${PROJECT_NAME}/QuarterWidget.h"
 )
 
 set(INST_DEVICES_HDRS
-  "${CMAKE_SOURCE_DIR}/include/${PROJECT_NAME}/devices/InputDevice.h"
-  "${CMAKE_SOURCE_DIR}/include/${PROJECT_NAME}/devices/Keyboard.h"
-  "${CMAKE_SOURCE_DIR}/include/${PROJECT_NAME}/devices/Mouse.h"
-  "${CMAKE_SOURCE_DIR}/include/${PROJECT_NAME}/devices/SpaceNavigatorDevice.h"
+  "${PROJECT_SOURCE_DIR}/include/${PROJECT_NAME}/devices/InputDevice.h"
+  "${PROJECT_SOURCE_DIR}/include/${PROJECT_NAME}/devices/Keyboard.h"
+  "${PROJECT_SOURCE_DIR}/include/${PROJECT_NAME}/devices/Mouse.h"
+  "${PROJECT_SOURCE_DIR}/include/${PROJECT_NAME}/devices/SpaceNavigatorDevice.h"
 )
 
 set(INST_EVENTHANDLERS_HDRS
-  "${CMAKE_SOURCE_DIR}/include/${PROJECT_NAME}/eventhandlers/DragDropHandler.h"
-  "${CMAKE_SOURCE_DIR}/include/${PROJECT_NAME}/eventhandlers/EventFilter.h"
-  "${CMAKE_SOURCE_DIR}/include/${PROJECT_NAME}/eventhandlers/FocusHandler.h"
+  "${PROJECT_SOURCE_DIR}/include/${PROJECT_NAME}/eventhandlers/DragDropHandler.h"
+  "${PROJECT_SOURCE_DIR}/include/${PROJECT_NAME}/eventhandlers/EventFilter.h"
+  "${PROJECT_SOURCE_DIR}/include/${PROJECT_NAME}/eventhandlers/FocusHandler.h"
 )
 
 set(QUARTER_PUBLIC_HDRS ${INST_HDRS} ${INST_DEVICES_HDRS} ${INST_EVENTHANDLERS_HDRS})
@@ -254,8 +254,8 @@ if(QUARTER_BUILD_DOCUMENTATION)
   set(DOXYGEN_EXCLUDE)
 
   set(DOXYFILE "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile")
-  set(DOXYGEN_OUTPUT "${CMAKE_BINARY_DIR}/html/index.html")
-  configure_file("${CMAKE_SOURCE_DIR}/docs/quarter.doxygen.cmake.in" ${DOXYFILE} @ONLY)
+  set(DOXYGEN_OUTPUT "${PROJECT_BINARY_DIR}/html/index.html")
+  configure_file("${PROJECT_SOURCE_DIR}/docs/quarter.doxygen.cmake.in" ${DOXYFILE} @ONLY)
 
 # ############################################################################
 # Setup documentation targets
@@ -265,7 +265,7 @@ if(QUARTER_BUILD_DOCUMENTATION)
     COMMAND ${CMAKE_COMMAND} -E echo_append "Generating API documentation with Doxygen "
     COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYFILE}
     COMMAND ${CMAKE_COMMAND} -E echo "done."
-    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+    WORKING_DIRECTORY "${PROJECT_BINARY_DIR}"
     DEPENDS ${DOXYFILE}
   )
   add_custom_target(documentation ALL DEPENDS ${DOXYGEN_OUTPUT})
@@ -273,15 +273,15 @@ if(QUARTER_BUILD_DOCUMENTATION)
 # ############################################################################
 # Install built documentation files
 # ############################################################################
-  install(DIRECTORY "${CMAKE_BINARY_DIR}/html" DESTINATION ${CMAKE_INSTALL_DOCDIR} COMPONENT documentation REGEX ".*\\.(chm|qch)" EXCLUDE)
+  install(DIRECTORY "${PROJECT_BINARY_DIR}/html" DESTINATION ${CMAKE_INSTALL_DOCDIR} COMPONENT documentation REGEX ".*\\.(chm|qch)" EXCLUDE)
   if(GENERATE_HTMLHELP)
-    install(FILES "${CMAKE_BINARY_DIR}/html/${PROJECT_NAME}-${PROJECT_VERSION_MAJOR}.chm" DESTINATION ${CMAKE_INSTALL_DOCDIR} COMPONENT documentation)
+    install(FILES "${PROJECT_BINARY_DIR}/html/${PROJECT_NAME}-${PROJECT_VERSION_MAJOR}.chm" DESTINATION ${CMAKE_INSTALL_DOCDIR} COMPONENT documentation)
   endif()
   if(GENERATE_QHP)
-    install(FILES "${CMAKE_BINARY_DIR}/html/${PROJECT_NAME}-${PROJECT_VERSION_MAJOR}.qch" DESTINATION ${CMAKE_INSTALL_DOCDIR} COMPONENT documentation)
+    install(FILES "${PROJECT_BINARY_DIR}/html/${PROJECT_NAME}-${PROJECT_VERSION_MAJOR}.qch" DESTINATION ${CMAKE_INSTALL_DOCDIR} COMPONENT documentation)
   endif()
   if(DOXYGEN_GENERATE_MAN)
-    install(DIRECTORY "${CMAKE_BINARY_DIR}/man/man3" DESTINATION ${CMAKE_INSTALL_MANDIR} COMPONENT documentation)
+    install(DIRECTORY "${PROJECT_BINARY_DIR}/man/man3" DESTINATION ${CMAKE_INSTALL_MANDIR} COMPONENT documentation)
     message(STATUS "CMAKE_INSTALL_MANDIR ${CMAKE_INSTALL_MANDIR}")
   endif()
 endif()
@@ -299,7 +299,7 @@ install(FILES ${INST_EVENTHANDLERS_HDRS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 # ############################################################################
 
 if(UNIX OR MINGW)
-  configure_file("${CMAKE_SOURCE_DIR}/${PROJECT_NAME}.pc.cmake.in" ${PROJECT_NAME}.pc @ONLY)
+  configure_file("${PROJECT_SOURCE_DIR}/${PROJECT_NAME}.pc.cmake.in" ${PROJECT_NAME}.pc @ONLY)
   install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pc" DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 endif()
 
@@ -308,7 +308,7 @@ configure_package_config_file(${PROJECT_NAME_LOWER}-config.cmake.in ${PROJECT_NA
   PATH_VARS CMAKE_INSTALL_LIBDIR
 )
 
-write_basic_package_version_file("${CMAKE_BINARY_DIR}/${PROJECT_NAME_LOWER}-config-version.cmake"
+write_basic_package_version_file("${PROJECT_BINARY_DIR}/${PROJECT_NAME_LOWER}-config-version.cmake"
   VERSION ${PROJECT_VERSION}
   COMPATIBILITY ExactVersion
 )
@@ -319,7 +319,7 @@ export(
   FILE ${PROJECT_NAME_LOWER}-export.cmake
 )
 
-install(FILES "${CMAKE_BINARY_DIR}/${PROJECT_NAME_LOWER}-config.cmake" "${CMAKE_BINARY_DIR}/${PROJECT_NAME_LOWER}-config-version.cmake"
+install(FILES "${PROJECT_BINARY_DIR}/${PROJECT_NAME_LOWER}-config.cmake" "${PROJECT_BINARY_DIR}/${PROJECT_NAME_LOWER}-config-version.cmake"
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}-${PROJECT_VERSION}
   COMPONENT development
 )
