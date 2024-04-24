@@ -110,10 +110,10 @@ if(WIN32)
     target_compile_definitions(${PROJECT_NAME} PRIVATE QUARTER_MAKE_DLL INTERFACE QUARTER_DLL)
   else()
     target_compile_definitions(${PROJECT_NAME} INTERFACE QUARTER_NOT_DLL)
-    if(MSVC)
-      set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Z7")                       # Override default /Zi to embed
-      set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /Z7")     # debugging info in the .lib.
-    endif()
+    # if(MSVC)
+      # set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Z7")                       # Override default /Zi to embed
+      # set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /Z7")     # debugging info in the .lib.
+    # endif()
   endif()
 endif()
 
