@@ -124,13 +124,12 @@ using namespace SIM::Coin3D::Quarter;
 #define PRIVATE(obj) obj->pimpl
 
 /*! constructor */
+QuarterWidget::QuarterWidget(const QUARTER_GL_FORMAT & format, QWidget * parent, const QUARTER_GL_WIDGET * sharewidget, Qt::WindowFlags f)
 #if QT_VERSION >= 0x060000
-QuarterWidget::QuarterWidget(const QSurfaceFormat & format, QWidget * parent, const QOpenGLWidget* sharewidget, Qt::WindowFlags f)
   : inherited(parent, f)
 {
   this->setFormat(format);
 #else
-QuarterWidget::QuarterWidget(const QGLFormat & format, QWidget * parent, const QGLWidget * sharewidget, Qt::WindowFlags f)
   : inherited(format, parent, sharewidget, f)
 {
 #endif
@@ -138,11 +137,10 @@ QuarterWidget::QuarterWidget(const QGLFormat & format, QWidget * parent, const Q
 }
 
 /*! constructor */
+QuarterWidget::QuarterWidget(QWidget * parent, const QUARTER_GL_WIDGET * sharewidget, Qt::WindowFlags f)
 #if QT_VERSION >= 0x060000
-QuarterWidget::QuarterWidget(QWidget * parent, const QOpenGLWidget* sharewidget, Qt::WindowFlags f)
   : inherited(parent, f)
 #else
-QuarterWidget::QuarterWidget(QWidget * parent, const QGLWidget * sharewidget, Qt::WindowFlags f)
   : inherited(parent, sharewidget, f)
 #endif
 {
@@ -150,11 +148,10 @@ QuarterWidget::QuarterWidget(QWidget * parent, const QGLWidget * sharewidget, Qt
 }
 
 /*! constructor */
+QuarterWidget::QuarterWidget(QUARTER_GL_CONTEXT * context, QWidget * parent, const QUARTER_GL_WIDGET * sharewidget, Qt::WindowFlags f)
 #if QT_VERSION >= 0x060000
-QuarterWidget::QuarterWidget(QOpenGLContext* context, QWidget * parent, const QOpenGLWidget * sharewidget, Qt::WindowFlags f)
   : inherited(/*context, */parent, f)
 #else
-QuarterWidget::QuarterWidget(QGLContext * context, QWidget * parent, const QGLWidget * sharewidget, Qt::WindowFlags f)
   : inherited(context, parent, sharewidget, f)
 #endif
 {
@@ -162,11 +159,7 @@ QuarterWidget::QuarterWidget(QGLContext * context, QWidget * parent, const QGLWi
 }
 
 void
-#if QT_VERSION >= 0x060000
-QuarterWidget::constructor(const QOpenGLWidget * sharewidget)
-#else
-QuarterWidget::constructor(const QGLWidget* sharewidget)
-#endif
+QuarterWidget::constructor(const QUARTER_GL_WIDGET * sharewidget)
 {
   PRIVATE(this) = new QuarterWidgetP(this, sharewidget);
 
@@ -1003,6 +996,24 @@ QuarterWidget::resetNavigationModeFile(void) {
   this->setNavigationModeFile(QUrl());
 }
 
+
+/**
+ * Sets up the default cursors for the widget.
+ */
+void QuarterWidget::setupDefaultCursors()
+{
+    this->setStateCursor("interact", Qt::ArrowCursor);
+    this->setStateCursor("idle", Qt::OpenHandCursor);
+#if QT_VERSION >= 0x040200
+    this->setStateCursor("rotate", Qt::ClosedHandCursor);
+#endif
+    this->setStateCursor("pan", Qt::SizeAllCursor);
+    this->setStateCursor("zoom", Qt::SizeVerCursor);
+    this->setStateCursor("dolly", Qt::SizeVerCursor);
+    this->setStateCursor("seek", Qt::CrossCursor);
+    this->setStateCursor("spin", Qt::OpenHandCursor);
+}
+
 /*!
   Sets a navigation mode file. Supports the schemes "coin" and "file"
 
@@ -1091,16 +1102,7 @@ QuarterWidget::setNavigationModeFile(const QUrl & url)
     // set up default cursors for the examiner navigation states
     //FIXME: It may be overly restrictive to not do this for arbitrary
     //navigation systems? - BFG 20090117
-    this->setStateCursor("interact", Qt::ArrowCursor);
-    this->setStateCursor("idle", Qt::OpenHandCursor);
-#if QT_VERSION >= 0x040200
-    this->setStateCursor("rotate", Qt::ClosedHandCursor);
-#endif
-    this->setStateCursor("pan", Qt::SizeAllCursor);
-    this->setStateCursor("zoom", Qt::SizeVerCursor);
-    this->setStateCursor("dolly", Qt::SizeVerCursor);
-    this->setStateCursor("seek", Qt::CrossCursor);
-    this->setStateCursor("spin", Qt::OpenHandCursor);
+    setupDefaultCursors();
   }
 }
 
