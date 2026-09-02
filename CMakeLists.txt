@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.0...3.29)
 
 function(report_prepare)
   set(multiValueArgs IF_APPLE IF_WIN32)
@@ -16,7 +16,7 @@ endfunction(report_prepare)
 
 set(QUARTER_MAJOR_VERSION 1)
 set(QUARTER_MINOR_VERSION 2)
-set(QUARTER_MICRO_VERSION 2)
+set(QUARTER_MICRO_VERSION 3)
 set(QUARTER_BETA_VERSION )
 set(QUARTER_VERSION ${QUARTER_MAJOR_VERSION}.${QUARTER_MINOR_VERSION}.${QUARTER_MICRO_VERSION}${QUARTER_BETA_VERSION})
 
@@ -35,6 +35,11 @@ set(VERSION ${QUARTER_VERSION})
 if(POLICY CMP0072)
   # get rid of OpenGL GLVND warning from CMake 3.11
   cmake_policy(SET CMP0072 NEW)
+endif()
+
+if(POLICY CMP0074)
+  # find_package() uses <PackageName>_ROOT variables.
+  cmake_policy(SET CMP0074 NEW)
 endif()
 
 # ############################################################################
